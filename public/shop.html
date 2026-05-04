@@ -4,14 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shop - Cake World</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Delius&display=swap" rel="stylesheet">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://kit.fontawesome.com/8141b5ebac.js" crossorigin="anonymous"></script>
-
+<!-- AOS Animation Library -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <link href="s1.css" rel="stylesheet">
   <style>
     body {
       font-family: 'Delius', cursive;
@@ -38,6 +39,7 @@
     .product-title {
       font-size: 1.2rem;
       font-weight: bold;
+      color: #333;
     }
 
     .product-price {
@@ -51,7 +53,6 @@
       color: #fff;
       padding: 8px 16px;
       border-radius: 12px;
-      cursor: pointer;
     }
 
     .add-btn:hover {
@@ -59,90 +60,110 @@
     }
   </style>
 </head>
+<body><nav class="custom-navbar">
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="about.html" >About</a></li>
+      <li><a href="#"><img src="logo.png" alt="Logo" class="logo"></a></li>
+      <li><a href="shop.html" class="active">Shop</a></li>
+      <li><a href="contact.html" >Contact</a></li>
+    </ul>
+    <div class="icon-links">
+      <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+      <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+    </div>
+  </nav>
 
-<body>
+  <div class="container py-5">
+    <h2 class="text-center mb-4">Our Delicious Products</h2>
+    <div class="row" id="productContainer">
+      <!-- Products will be injected here via JavaScript -->
+    </div>
+  </div>
 
-<nav class="navbar navbar-light bg-light px-3">
-  <a href="home.html">Home</a>
-  <a href="shop.html">Shop</a>
-  <a href="cart.html">
-    Cart 🛒 <span id="cart-count">0</span>
-  </a>
-</nav>
-
-<div class="container py-5">
-  <h2 class="text-center mb-4">Our Delicious Products</h2>
-  <div class="row" id="productContainer"></div>
-</div>
-
-<script>
-const products = [
+  <script>
+     const products = [
   { name: "Chocolate Truffle", price: "₹499", image: "cake7.webp" },
   { name: "Strawberry Delight", price: "₹459", image: "cake2.jpg" },
   { name: "Vanilla Cream", price: "₹399", image: "vennila.jpg" },
   { name: "Red Velvet", price: "₹599", image: "cake8.webp" },
-  { name: "Black Forest", price: "₹489", image: "cake10.jpg" }
+  { name: "Pineapple Punch", price: "₹429", image: "cake9.jpg" },
+  { name: "Black Forest", price: "₹489", image: "cake10.jpg" },
+  { name: "Magical Rainbow", price: "₹500", image: "cake5.webp" },
+  { name: "Brownie", price: "₹300", image: "cake6.webp" },
+  { name: "Vennila Cupcake", price: "₹60", image: "cupcake1.jpg" },
+  { name: "Strawberry Cupcake", price: "₹70", image: "cupcake2.jpg" },
+  { name: "Chocolate Cupcake", price: "₹75", image: "cupcake3.jpg" },
+  { name: "Mango Mousse", price: "₹470", image: "cake11.jpg" },
+  { name: "Blueberry Cheesecake", price: "₹520", image: "cake12.jpg" },
+  { name: "Choco Lava Cake", price: "₹120", image: "cake13.jpg" },
+  { name: "Tiramisu Slice", price: "₹150", image: "cake14.jpg" },
+  { name: "Ferrero Rocher Cake", price: "₹650", image: "cake15.jpg" },
+  { name: "Coffee Walnut Cake", price: "₹480", image: "cake16.jpg" },
+  { name: "Butterscotch Bliss", price: "₹440", image: "cake17.jpg" },
+  { name: "Caramel Drizzle Cake", price: "₹510", image: "cake18.jpg" },
+  { name: "Mini Red Velvet Cupcake", price: "₹55", image: "cupcake4.jpg" },
+  { name: "Lemon Zest Cupcake", price: "₹65", image: "cupcake5.jpg" },
+  { name: "Peanut Butter Cupcake", price: "₹70", image: "cupcake6.jpg" },
+  { name: "Apple Cinnamon Cake", price: "₹560", image: "cake19.jpg" },
+  { name: "Matcha Green Tea Cake", price: "₹540", image: "cake20.jpg" },
+  { name: "Coconut Cream Cake", price: "₹480", image: "cake21.jpg" },
+  { name: "Churros Cake", price: "₹450", image: "cake22.jpg" },
+  { name: "Orange Blossom Cake", price: "₹475", image: "cake23.jpg" },
+  { name: "Banoffee Pie", price: "₹530", image: "cake24.jpg" },
+  { name: "Raspberry Sorbet Cake", price: "₹490", image: "cake25.jpg" },
+  { name: "Chocolate Mocha Cake", price: "₹530", image: "cake26.jpg" },
+  { name: "Hazelnut Crunch Cake", price: "₹550", image: "cake27.jpg" },
+  { name: "Lime Margarita Cake", price: "₹490", image: "cake28.jpg" },
+  { name: "Red Currant Tart", price: "₹460", image: "cake29.jpg" },
+  { name: "Pistachio Rose Cake", price: "₹520", image: "cake30.jpg" },
+  { name: "Peach Melba Cake", price: "₹530", image: "cake31.jpg" },
+  { name: "Chocolate Almond Cake", price: "₹580", image: "cake32.jpg" },
+  { name: "Carrot Cake", price: "₹460", image: "cake33.jpg" },
+  { name: "Raisin Spice Cake", price: "₹480", image: "cake34.jpg" },
+  { name: "Chocolate Chip Cookie Cake", price: "₹450", image: "cake35.jpg" },
+  { name: "Almond Butter Cake", price: "₹510", image: "cake36.jpg" },
+  { name: "Lemon Meringue Cake", price: "₹520", image: "cake37.jpg" }, <!-- New cake -->
+  { name: "Peach & Almond Cake", price: "₹550", image: "cake38.jpg" } <!-- New cake -->
 ];
-
-// ================= CART COUNT =================
-function updateCartCount() {
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
-  let count = cart.reduce((sum, item) => sum + item.quantity, 0);
-  document.getElementById('cart-count').textContent = count;
-}
-
-// ================= ADD TO CART =================
-function addToCart(product) {
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
-  if (!Array.isArray(cart)) cart = [];
-
-  let existing = cart.find(item => item.name === product.name);
-
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    cart.push({
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      quantity: 1
+  
+    const container = document.getElementById('productContainer');
+  
+    // Load cart count
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const countSpan = document.getElementById('cart-count');
+      if (countSpan) countSpan.textContent = cart.length;
+    }
+  
+    // Add to cart function
+    function addToCart(product) {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push(product);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`${product.name} added to cart!`);
+      updateCartCount();
+    }
+  
+    // Generate product cards
+    products.forEach(product => {
+      const card = document.createElement('div');
+      card.className = 'col-md-4 mb-4';
+      card.innerHTML = `
+        <div class="card product-card">
+          <img src="${product.image}" class="card-img-top product-img" alt="${product.name}">
+          <div class="card-body text-center">
+            <h5 class="product-title">${product.name}</h5>
+            <p class="product-price">${product.price}</p>
+            <button class="add-btn" onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
     });
-  }
-
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartCount();
-
-  alert(product.name + " added to cart!");
-}
-
-// ================= RENDER PRODUCTS =================
-const container = document.getElementById('productContainer');
-
-products.forEach(product => {
-  const card = document.createElement('div');
-  card.className = 'col-md-4 mb-4';
-
-  card.innerHTML = `
-    <div class="card product-card">
-      <img src="${product.image}" class="card-img-top product-img">
-      <div class="card-body text-center">
-        <h5 class="product-title">${product.name}</h5>
-        <p class="product-price">${product.price}</p>
-
-        <button class="add-btn" 
-          onclick='addToCart(${JSON.stringify(product).replace(/"/g, "&quot;")})'>
-          Add to Cart
-        </button>
-
-      </div>
-    </div>
-  `;
-
-  container.appendChild(card);
-});
-
-updateCartCount();
-</script>
-
+  
+    updateCartCount();
+  </script>
+  
 </body>
 </html>
