@@ -29,16 +29,27 @@ contacts = db["contacts"]
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.json
+
+    if not data:
+        return jsonify({"error": "No data received"}), 400
+
     name = data.get("name")
     email = data.get("email")
     password = data.get("password")
-    
+
+    if not name or not email or not password:
+        return jsonify({"error": "All fields are required"}), 400
+
     if users.find_one({"email": email}):
-        return jsonify({"message": "User already exists"}), 400
+        return jsonify({"error": "User already exists"}), 400
 
-    users.insert_one({"name": name, "email": email, "password": password})
+    users.insert_one({
+        "name": name,
+        "email": email,
+        "password": password
+    })
+
     return jsonify({"message": "User registered successfully"})
-
 @app.route("/login", methods=["POST"])
 def login():
     data = request.json
