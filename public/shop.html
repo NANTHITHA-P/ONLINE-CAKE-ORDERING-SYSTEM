@@ -123,9 +123,9 @@
   { name: "Raisin Spice Cake", price: "₹480", image: "cake34.jpg" },
   { name: "Chocolate Chip Cookie Cake", price: "₹450", image: "cake35.jpg" },
   { name: "Almond Butter Cake", price: "₹510", image: "cake36.jpg" },
-  { name: "Lemon Meringue Cake", price: "₹520", image: "cake37.jpg" }, <!-- New cake -->
-  { name: "Peach & Almond Cake", price: "₹550", image: "cake38.jpg" } <!-- New cake -->
-];
+  { name: "Lemon Meringue Cake", price: "₹520", image: "cake37.jpg" }, 
+  { name: "Peach & Almond Cake", price: "₹550", image: "cake38.jpg" } 
+  ];
   
     const container = document.getElementById('productContainer');
   
@@ -137,13 +137,31 @@
     }
   
     // Add to cart function
-    function addToCart(product) {
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      cart.push(product);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert(`${product.name} added to cart!`);
-      updateCartCount();
-    }
+function addToCart(product) {
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  if (!Array.isArray(cart)) cart = [];
+
+  let existing = cart.find(item => item.name === product.name);
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1
+    });
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+
+  console.log("CART:", localStorage.getItem('cart')); // DEBUG
+
+  alert(`${product.name} added to cart!`);
+  updateCartCount();
+}
   
     // Generate product cards
     products.forEach(product => {
@@ -155,7 +173,7 @@
           <div class="card-body text-center">
             <h5 class="product-title">${product.name}</h5>
             <p class="product-price">${product.price}</p>
-            <button class="add-btn" onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+            <button class="add-btn" onclick='addToCart(${JSON.stringify(product).replace(/"/g,"&quot;")})'>Add to Cart</button>
           </div>
         </div>
       `;
