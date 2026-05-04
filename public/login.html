@@ -61,36 +61,56 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            setTimeout(() => {
-                document.querySelector('.login-container').classList.add('show');
-            }, 800);
+        document.getElementById("loginForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    let email = document.getElementById("username").value.trim(); // treat as email
+    let password = document.getElementById("password").value.trim();
+    let role = document.getElementById("role").value;
+    let errorMsg = document.getElementById("error-msg");
+
+    errorMsg.textContent = "";
+
+    if (!email || !password || !role) {
+        errorMsg.textContent = "All fields are required!";
+        return;
+    }
+
+    try {
+        const response = await fetch("https://online-cake-ordering-system-yps7.onrender.com/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
         });
 
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            
-            let username = document.getElementById("username").value.trim();
-            let password = document.getElementById("password").value.trim();
-            let role = document.getElementById("role").value;
-            let errorMsg = document.getElementById("error-msg");
+        const data = await response.json();
+        console.log("Login response:", data);
 
-            if (!username || !password || !role) {
-                errorMsg.textContent = "All fields are required!";
-                return;
-            }
+        if (!response.ok) {
+            errorMsg.textContent = data.error || "Login failed";
+            return;
+        }
 
-            // Redirect based on role selection
-            switch (role) {
-                case "admin":
-                    window.location.href = "admin_dashboard.html";
-                    break;
-                case "customer":
-                    window.location.href = "home.html";
-                    break;
-                default:
-                    errorMsg.textContent = "Invalid role selected!";
-            }
+        // ✅ SUCCESS LOGIN
+        alert("Login successful!");
+
+        // role-based redirect
+        if (role === "admin") {
+            window.location.href = "admin_dashboard.html";
+        } else {
+            window.location.href = "home.html";
+        }
+
+    } catch (error) {
+        console.error("Error:", error);
+        errorMsg.textContent = "Server error. Try again.";
+    }
+});
         });
     </script>
 
