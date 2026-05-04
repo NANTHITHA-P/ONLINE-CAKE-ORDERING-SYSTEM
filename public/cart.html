@@ -68,16 +68,15 @@ function renderCart() {
   cartContainer.innerHTML = '';
   total = 0;
 
-  if (!Array.isArray(cartItems)) cartItems = [];
-
   if (cartItems.length === 0) {
-    cartContainer.innerHTML = "<p>Your cart is empty 🛒</p>";
+    cartContainer.innerHTML = '<p>Your cart is empty.</p>';
     totalDisplay.textContent = 0;
     return;
   }
 
   cartItems.forEach((item, index) => {
-    const price = parseInt(item.price.replace("₹", ""));
+
+    const price = Number(item.price);   // FIX
     const quantity = item.quantity || 1;
     const subtotal = price * quantity;
 
@@ -88,26 +87,28 @@ function renderCart() {
 
     div.innerHTML = `
       <div class="col-md-3">
-        <img src="${item.image}" width="100">
+        <img src="${item.image}" alt="${item.name}" />
       </div>
 
       <div class="col-md-6">
         <h5>${item.name}</h5>
-        <p>₹${price}</p>
+
+        <p>Price: ₹${price}</p>
 
         <div class="d-flex align-items-center">
-          <button class="btn btn-sm btn-secondary me-2" onclick="decreaseQty(${index})">-</button>
-
-          <span>${quantity}</span>
-
-          <button class="btn btn-sm btn-secondary ms-2" onclick="increaseQty(${index})">+</button>
+          <label class="me-2 mb-0">Qty:</label>
+          <input type="number" min="1" value="${quantity}"
+            class="form-control form-control-sm quantity-input"
+            data-index="${index}" style="width:70px;">
         </div>
 
-        <p class="mt-2"><b>Subtotal: ₹${subtotal}</b></p>
+        <p class="mt-2 mb-0"><strong>Subtotal: ₹${subtotal}</strong></p>
       </div>
 
       <div class="col-md-3 text-end">
-        <button class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
+        <button class="btn btn-danger btn-sm" onclick="removeItem(${index})">
+          Remove
+        </button>
       </div>
     `;
 
@@ -116,7 +117,6 @@ function renderCart() {
 
   totalDisplay.textContent = total;
 }
-
 // ================= QUANTITY CONTROL =================
 function increaseQty(index) {
   cartItems[index].quantity = (cartItems[index].quantity || 1) + 1;
