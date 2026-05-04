@@ -11,7 +11,14 @@ app.secret_key = os.urandom(24)  # Secure random secret key
 CORS(app)
 
 # MongoDB connection
-client = MongoClient("mongodb://localhost:27017/")
+
+client = MongoClient("mongodb+srv://nanthithaponnusamy:123@cluster0.dqri55s.mongodb.net/cake_shop?retryWrites=true&w=majority")
+
+try:
+    print(client.list_database_names())
+    print("✅ Connected successfully")
+except Exception as e:
+    print("❌ Error:", e)
 db = client["cake_shop"]
 users = db["users"]
 orders = db["orders"]
@@ -169,4 +176,4 @@ def static_files(path):
 # ========== RUN APP ==========
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3000)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 3000)))

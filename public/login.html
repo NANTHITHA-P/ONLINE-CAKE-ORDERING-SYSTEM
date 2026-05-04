@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('login.webp'); /* Change as needed */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        .login-container {
+            width: 400px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.8s ease-in, transform 0.8s ease-in;
+        }
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container container">
+        <h3 class="text-center">User Login</h3>
+        <form id="loginForm">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" placeholder="Enter username" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+            </div>
+            <div class="mb-3">
+                <label for="role" class="form-label">Select Role</label>
+                <select class="form-control" id="role" required>
+                    <option value="">-- Select Role --</option>
+                    <option value="admin">Admin</option>
+                    <option value="customer">Customer</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+        <p class="text-danger mt-3 text-center" id="error-msg"></p>
+        <p class="text-center mt-2">Don't have an account? <a href="signup.html">Create one</a></p>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(() => {
+                document.querySelector('.login-container').classList.add('show');
+            }, 800);
+        });
+
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            let username = document.getElementById("username").value.trim();
+            let password = document.getElementById("password").value.trim();
+            let role = document.getElementById("role").value;
+            let errorMsg = document.getElementById("error-msg");
+
+            if (!username || !password || !role) {
+                errorMsg.textContent = "All fields are required!";
+                return;
+            }
+
+            // Redirect based on role selection
+            switch (role) {
+                case "admin":
+                    window.location.href = "admin_dashboard.html";
+                    break;
+                case "customer":
+                    window.location.href = "home.html";
+                    break;
+                default:
+                    errorMsg.textContent = "Invalid role selected!";
+            }
+        });
+    </script>
+
+</body>
+</html>
