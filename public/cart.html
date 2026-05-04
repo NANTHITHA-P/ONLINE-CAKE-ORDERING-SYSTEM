@@ -194,14 +194,15 @@ document.getElementById('checkout-form').addEventListener('submit', async (e) =>
   });
 
   const data = await res.json();
+console.log("Response:", data);
 
-  if (res.ok) {
-    alert("Order placed successfully!");
-    localStorage.removeItem("cart");
-    location.reload();
-  } else {
-    alert("Order failed!");
-  }
+if (res.ok) {
+  alert("Order placed successfully!");
+  localStorage.removeItem("cart");
+  location.reload();
+} else {
+  alert(data.error || "Order failed");
+}
 });
 
 renderCart();
