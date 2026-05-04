@@ -176,7 +176,7 @@
       const email = document.getElementById('signupEmail').value;
       const password = document.getElementById('signupPassword').value;
 
-      fetch('http://localhost:3000/signup', {
+      fetch('https://online-cake-ordering-system-yps7.onrender.com/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
