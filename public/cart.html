@@ -188,7 +188,7 @@ document.getElementById('checkout-form').addEventListener('submit', async (e) =>
     total: finalTotal
   };
 
-  const res = await fetch("http://localhost:3000/api/orders", {
+  const res = await fetch("https://online-cake-ordering-system-yps7.onrender.com/api/orders", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(orderData)
