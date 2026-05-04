@@ -50,17 +50,28 @@ def signup():
     })
 
     return jsonify({"message": "User registered successfully"})
+    
 @app.route("/login", methods=["POST"])
 def login():
     data = request.json
+
+    if not data:
+        return jsonify({"error": "No data received"}), 400
+
     email = data.get("email")
     password = data.get("password")
 
+    if not email or not password:
+        return jsonify({"error": "Email and password required"}), 400
+
     user = users.find_one({"email": email, "password": password})
+
     if user:
         session['user_email'] = email
-        return jsonify({"message": "Login successful"})
-    return jsonify({"message": "Invalid email or password"}), 400
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        return jsonify({"error": "Invalid email or password"}), 401
+
 
 @app.route("/logout")
 def logout():
