@@ -59,6 +59,11 @@ let total = 0;
 const cartContainer = document.getElementById('cart-items');
 const totalDisplay = document.getElementById('total-price');
 
+function saveCart() {
+  localStorage.setItem('cart', JSON.stringify(cartItems));
+}
+
+// ================= RENDER CART =================
 function renderCart() {
   cartContainer.innerHTML = '';
   total = 0;
@@ -79,19 +84,29 @@ function renderCart() {
     total += subtotal;
 
     const div = document.createElement('div');
-    div.className = 'cart-item row';
+    div.className = 'cart-item row align-items-center';
 
     div.innerHTML = `
-      <div class="col-md-4">
+      <div class="col-md-3">
         <img src="${item.image}" width="100">
       </div>
-      <div class="col-md-4">
+
+      <div class="col-md-6">
         <h5>${item.name}</h5>
         <p>₹${price}</p>
-        <p>Qty: ${quantity}</p>
-        <p><b>Subtotal: ₹${subtotal}</b></p>
+
+        <div class="d-flex align-items-center">
+          <button class="btn btn-sm btn-secondary me-2" onclick="decreaseQty(${index})">-</button>
+
+          <span>${quantity}</span>
+
+          <button class="btn btn-sm btn-secondary ms-2" onclick="increaseQty(${index})">+</button>
+        </div>
+
+        <p class="mt-2"><b>Subtotal: ₹${subtotal}</b></p>
       </div>
-      <div class="col-md-4">
+
+      <div class="col-md-3 text-end">
         <button class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
       </div>
     `;
@@ -102,21 +117,50 @@ function renderCart() {
   totalDisplay.textContent = total;
 }
 
-function removeItem(index) {
-  cartItems.splice(index, 1);
-  localStorage.setItem('cart', JSON.stringify(cartItems));
+// ================= QUANTITY CONTROL =================
+function increaseQty(index) {
+  cartItems[index].quantity = (cartItems[index].quantity || 1) + 1;
+  saveCart();
   renderCart();
 }
 
+function decreaseQty(index) {
+  if ((cartItems[index].quantity || 1) > 1) {
+    cartItems[index].quantity -= 1;
+  } else {
+    cartItems.splice(index, 1);
+  }
+  saveCart();
+  renderCart();
+}
+
+// ================= REMOVE ITEM =================
+function removeItem(index) {
+  cartItems.splice(index, 1);
+  saveCart();
+  renderCart();
+}
+
+// ================= CHECKOUT =================
 document.getElementById('checkout-form').addEventListener('submit', async function (e) {
   e.preventDefault();
 
+  cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+
   if (cartItems.length === 0) {
-    alert("Cart is empty!");
+    alert("Your cart is empty!");
     return;
   }
 
-  let orderData = {
+  total = 0;
+
+  cartItems.forEach(item => {
+    const price = parseInt(item.price.replace("₹", ""));
+    const quantity = item.quantity || 1;
+    total += price * quantity;
+  });
+
+  const orderData = {
     name: document.getElementById('name').value,
     email: document.getElementById('email').value,
     phone: document.getElementById('phone').value,
@@ -125,20 +169,28 @@ document.getElementById('checkout-form').addEventListener('submit', async functi
     total: total
   };
 
-  const response = await fetch("https://online-cake-ordering-system-yps7.onrender.com/api/orders", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(orderData)
-  });
+  try {
+    const response = await fetch("https://online-cake-ordering-system-yps7.onrender.com/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(orderData)
+    });
 
-  const result = await response.json();
+    const result = await response.json();
 
-  if (response.ok) {
-    alert("Order placed successfully!");
-    localStorage.removeItem("cart");
-    window.location.reload();
-  } else {
-    alert(result.error || "Order failed");
+    console.log(result);
+
+    if (response.ok) {
+      alert("Order placed successfully!");
+      localStorage.removeItem("cart");
+      window.location.reload();
+    } else {
+      alert(result.error || "Order failed");
+    }
+
+  } catch (error) {
+    console.error(error);
+    alert("Server error. Try again later.");
   }
 });
 
