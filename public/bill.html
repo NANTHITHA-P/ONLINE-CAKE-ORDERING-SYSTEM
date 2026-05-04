@@ -182,7 +182,7 @@
 
     let grandTotal = 0;
 
-    order.cart.forEach(item => {
+    order.items.forEach(item => {
       const product = item.product_name || item.name || item.item || "N/A";
       const quantity = parseInt(item.quantity || item.qty || 1);
       let price = item.price || item.cost || 0;
