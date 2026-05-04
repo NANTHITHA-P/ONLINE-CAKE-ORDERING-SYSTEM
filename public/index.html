@@ -209,7 +209,7 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Logging in...';
 
-    fetch('/login', {  // Removed hardcoded URL - use relative path
+    fetch('https://online-cake-ordering-system-yps7.onrender.com/login', {  // Removed hardcoded URL - use relative path
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json',
